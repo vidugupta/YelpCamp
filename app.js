@@ -3,7 +3,8 @@ const path = require('path');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const app = express();
-const Campground = require('./models/campground')
+const Campground = require('./models/campground');
+const campground = require('./models/campground');
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp');
 
@@ -55,6 +56,12 @@ app.put('/campgrounds/:id', async (req, res) => {
     const { id } = req.params;
     const campground = await Campground.findByIdAndUpdate(id, {...req.body.campground});
     res.redirect(`/campgrounds/${campground._id}`);
+});
+
+app.delete('/campgrounds/:id', async (req, res) => {
+    const { id } = req.params;
+    await campground.findByIdAndDelete(id);
+    res.redirect('/campgrounds');
 });
 
 app.listen(3000, ()=>{
